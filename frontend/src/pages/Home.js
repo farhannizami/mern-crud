@@ -1,9 +1,35 @@
+import { useState, useEffect } from 'react'
+
+
+//components 
+import NoteDetails from '../components/NoteDetails';
+
+
 const Home = () => {
+
+    const [notes, setNotes] = useState(null);
+
+    useEffect(() => {
+        const fetchNotes = async () => {
+            const response = await fetch("http://localhost:4000/api/notes");
+
+            if (response.ok) {
+                const json = await response.json();
+                setNotes(json);
+            }
+        }
+
+        fetchNotes();
+    }, []);
+
     return (
         <div className="home">
-            <h2>
-                Home
-            </h2>
+            <div className='notes'>
+                {notes && notes.map((note) => (
+                    <NoteDetails key={note._id} note={note}></NoteDetails>
+                ))
+                }
+            </div>
         </div>
     )
 }

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 
 //components 
 import NoteDetails from '../components/NoteDetails';
+import NoteForm from '../components/NoteForm';
 
 
 const Home = () => {
@@ -27,9 +28,10 @@ const Home = () => {
             <div className='notes'>
                 {notes && notes.map((note) => (
                     <NoteDetails key={note._id} note={note}></NoteDetails>
-                ))
-                }
+                ))}
             </div>
+
+            <NoteForm></NoteForm>
         </div>
     )
 }

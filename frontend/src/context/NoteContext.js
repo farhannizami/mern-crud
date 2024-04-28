@@ -12,6 +12,10 @@ export const noteReducer = (state, action) => {
             return {
                 notes: [action.payload, ...state.notes]
             }
+        case 'DELETE_NOTE':
+            return {
+                notes: state.notes.filter((nt) => nt._id !== action.payload._id) 
+            }
         default:
             return state;
     }

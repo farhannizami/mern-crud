@@ -13,6 +13,19 @@ const getNotes = async (req, res) => {
 const createNote = async (req, res) => {
     const { title, msgbody } = req.body
 
+    let emptyfield = [];
+
+    if (!title) {
+        emptyfield.push('title');
+    }
+    if (!msgbody) {
+        emptyfield.push('body');
+    }
+
+    if (emptyfield.length > 0) {
+        return res.status(400).json({ error: 'Please fill in all the fields' , emptyfield });
+    }
+
     try {
         const note = await Note.create({ title, msgbody });
         res.status(200).json(note);

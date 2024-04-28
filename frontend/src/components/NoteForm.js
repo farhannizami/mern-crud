@@ -6,6 +6,7 @@ const WorkoutForm = () => {
     const [title, setTitle] = useState('');
     const [msgbody, setMsgBody] = useState('');
     const [error, setError] = useState(null);
+    const [emptyfield, setEmptyfield] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -23,11 +24,13 @@ const WorkoutForm = () => {
 
         if (!response.ok) {
             setError(json.error);
+            setEmptyfield(json.emptyfield);
         }
         if (response.ok) {
             setError(null);
             setTitle('');
             setMsgBody('');
+            setEmptyfield([]);
             console.log('new Note added:', json);
             dispatch({type: 'CREATE_NOTE', payload: json});
         }
@@ -43,6 +46,7 @@ const WorkoutForm = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
+                className={emptyfield.includes('title')? 'error': ''}
             />
 
             <label>Note Body:</label>
@@ -50,6 +54,7 @@ const WorkoutForm = () => {
                 type="text"
                 onChange={(e) => setMsgBody(e.target.value)}
                 value={msgbody}
+                className={emptyfield.includes('body')? 'error': ''}
             />
 
             <button>Add Note</button>

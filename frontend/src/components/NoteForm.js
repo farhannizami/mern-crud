@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNoteContext } from '../hooks/useNoteContext'
 
 const WorkoutForm = () => {
-    const [title, setTitle] = useState('')
-    const [msgbody, setMsgBody] = useState('')
-    const [error, setError] = useState(null)
+    const {dispatch} = useNoteContext();
+    const [title, setTitle] = useState('');
+    const [msgbody, setMsgBody] = useState('');
+    const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -20,13 +22,14 @@ const WorkoutForm = () => {
         const json = await response.json()
 
         if (!response.ok) {
-            setError(json.error)
+            setError(json.error);
         }
         if (response.ok) {
-            setError(null)
-            setTitle('')
-            setMsgBody('')
-            console.log('new Note added:', json)
+            setError(null);
+            setTitle('');
+            setMsgBody('');
+            console.log('new Note added:', json);
+            dispatch({type: 'CREATE_NOTE', payload: json});
         }
 
     }

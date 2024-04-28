@@ -1,22 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useNoteContext } from '../hooks/useNoteContext';
 
 
 //components 
 import NoteDetails from '../components/NoteDetails';
 import NoteForm from '../components/NoteForm';
+import { json } from 'react-router-dom';
 
 
 const Home = () => {
 
-    const [notes, setNotes] = useState(null);
+    const {notes, dispatch} = useNoteContext();
 
     useEffect(() => {
         const fetchNotes = async () => {
             const response = await fetch("http://localhost:4000/api/notes");
+            const json = await response.json();
 
             if (response.ok) {
-                const json = await response.json();
-                setNotes(json);
+                dispatch({type: 'SET_NOTES', payload: json});
             }
         }
 

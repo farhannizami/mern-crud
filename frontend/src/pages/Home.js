@@ -5,7 +5,6 @@ import { useNoteContext } from '../hooks/useNoteContext';
 //components 
 import NoteDetails from '../components/NoteDetails';
 import NoteForm from '../components/NoteForm';
-import { json } from 'react-router-dom';
 
 
 const Home = () => {
@@ -23,7 +22,7 @@ const Home = () => {
         }
 
         fetchNotes();
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="home">

@@ -1,8 +1,11 @@
 import { useNoteContext } from "../hooks/useNoteContext";
 
+// date
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+
 const NoteDetails = ({ note }) => {
 
-    const {dispatch} = useNoteContext();
+    const { dispatch } = useNoteContext();
 
     const handleClick = async () => {
         const response = await fetch('http://localhost:4000/api/notes/' + note._id, {
@@ -11,7 +14,7 @@ const NoteDetails = ({ note }) => {
 
         const json = await response.json();
         if (response.ok) {
-            dispatch({type: 'DELETE_NOTE', payload: json});
+            dispatch({ type: 'DELETE_NOTE', payload: json });
         }
     }
 
@@ -19,8 +22,8 @@ const NoteDetails = ({ note }) => {
         <div className="note-details">
             <h4>{note.title}</h4>
             <p>{note.msgbody}</p>
-            <p>{note.createdAt}</p>
-            <span onClick={handleClick}>Delete</span>
+            <p>{formatDistanceToNow(new Date(note.createdAt), { addSuffix: true })}</p>
+            <span className="material-symbols-outlined" onClick={handleClick}>Delete</span>
         </div>
     )
 }

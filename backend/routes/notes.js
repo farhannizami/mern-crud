@@ -1,7 +1,10 @@
 const express = require('express');
+const { createNote, getNotes, getNoteById, deleteNoteById, updateNoteById } = require('../controllers/NoteControllers');
+const requireAuth = require('../middleware/requireAuth');
 
 const router = express.Router();
-const { createNote, getNotes, getNoteById, deleteNoteById, updateNoteById } = require('../controllers/NoteControllers');
+
+router.use(requireAuth);
 
 //get all notes
 router.get('/', getNotes);

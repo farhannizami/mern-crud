@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 
 // get all notes
 const getNotes = async (req, res) => {
-    const notes = await Note.find({}).sort({ createdAt: -1 }); // sort decending order
+    const user_id = req.user._id;
+    const notes = await Note.find({ user_id }).sort({ createdAt: -1 }); // sort decending order
     res.status(200).json(notes);
 }
 
@@ -23,11 +24,13 @@ const createNote = async (req, res) => {
     }
 
     if (emptyfield.length > 0) {
-        return res.status(400).json({ error: 'Please fill in all the fields' , emptyfield });
+        return res.status(400).json({ error: 'Please fill in all the fields', emptyfield });
     }
 
     try {
-        const note = await Note.create({ title, msgbody });
+
+        const user_id = req.user._id;
+        const note = await Note.create({ title, msgbody, user_id });
         res.status(200).json(note);
     }
     catch (error) {

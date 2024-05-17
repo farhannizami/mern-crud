@@ -1,23 +1,31 @@
-import { useState } from 'react'
-import { useNoteContext } from '../hooks/useNoteContext'
+import { useState } from 'react';
+import { useNoteContext } from '../hooks/useNoteContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const WorkoutForm = () => {
-    const {dispatch} = useNoteContext();
+    const { dispatch } = useNoteContext();
     const [title, setTitle] = useState('');
     const [msgbody, setMsgBody] = useState('');
     const [error, setError] = useState(null);
     const [emptyfield, setEmptyfield] = useState([]);
+    const { user } = useAuthContext();
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        const workout = { title, msgbody }
+        if (!user) {
+            setError('You must be logged in');
+            return;
+        }
+
+        const workout = { title, msgbody };
 
         const response = await fetch('http://localhost:4000/api/notes', {
             method: 'POST',
             body: JSON.stringify(workout),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
             }
         })
         const json = await response.json()
@@ -32,7 +40,7 @@ const WorkoutForm = () => {
             setMsgBody('');
             setEmptyfield([]);
             console.log('new Note added:', json);
-            dispatch({type: 'CREATE_NOTE', payload: json});
+            dispatch({ type: 'CREATE_NOTE', payload: json });
         }
 
     }
@@ -46,7 +54,7 @@ const WorkoutForm = () => {
                 type="text"
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
-                className={emptyfield.includes('title')? 'error': ''}
+                className={emptyfield.includes('title') ? 'error' : ''}
             />
 
             <label>Note Body:</label>
@@ -54,7 +62,7 @@ const WorkoutForm = () => {
                 type="text"
                 onChange={(e) => setMsgBody(e.target.value)}
                 value={msgbody}
-                className={emptyfield.includes('body')? 'error': ''}
+                className={emptyfield.includes('body') ? 'error' : ''}
             />
 
             <button>Add Note</button>
